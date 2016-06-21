@@ -1,0 +1,52 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+	bool exit = true;
+	char pick;
+	while (exit)
+	{
+		cout << "Please Choose: \n 1) to Enter First Polynomial \n 2) to Enter Second Polynomial \n 3) to Add Polynomials \n 4) to Exit \n\n";
+
+		cin >> pick;
+		switch (pick) {
+		case '1':
+			cout << "You Picked 1\n";
+			//Delete poly
+			//Enter polynomial 1
+			//display polynomial Entered
+			//Overwrite polynomial
+			// insert polynomial 1
+			break;
+		case '2':
+			cout << "You Picked 2\n";
+			//Delete poly
+			//Enter polynomial 2
+			//display polynomail Entered
+			//Overwrite polynomial
+			//insert polynomial 2
+			break;
+		case '3':
+			cout << "You Picked 3\n";
+			//Delete poly
+			//Add two polynomials
+			//Delete polynomial when new poly
+			//insert polynomial list 1 and 2
+			//display Added polynomials
+			break;
+		case '4':
+			cout << "Thank You For Using PolyWhirl! Be Happy =)";
+			exit = false;
+			break;
+		default:
+			cout << "Please Choose a number from the list.\n";
+			break;
+		}
+
+	}
+	cin.get();
+	return 0;
+}
