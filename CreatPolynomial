@@ -1,0 +1,267 @@
+//erich
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <algorithm>
+#include <stdlib.h>
+#include <stdio.h>
+#include "OrderedPoly.h"
+
+
+using namespace std;
+
+void printOrderedPoly(const OrderedPoly<int>& f) {//joshua
+	OrderedPoly<int>::const_piterator iter = f.begin();
+	while (iter != f.end()) {
+		if ((f.getLeadDegree() != *iter) && (iter.getCo()>0))
+			cout << "+";
+		if (*iter == 0) {
+			cout << iter.getCo();
+			++iter;
+		}
+		else {
+			if(iter.getCo() != 1){
+				cout << iter.getCo();
+			}
+			cout << "x";
+			if ((*iter != 1)) {
+				cout << "^" << *iter;
+			}
+			++iter;
+		}
+		
+	}
+	cout << endl << endl;
+}
+
+int main() {
+//Variables erich
+	string poly3 = "-5x^-6+4x^0+1x^543+5x^7+20x^-1+1+20x^-1";
+	//string poly3 = "-1-1-1-1+1-1";
+	//cin >> poly3;  
+	OrderedPoly<int> poly20;
+	string poly2 = "~";
+	unsigned int it = 0;
+	string exp;
+	string coe;
+	int expint;
+	int coeint;
+	//cout << poly3 << endl;
+	int polylength = poly3.length();
+//Remove spaces from poly string
+	//poly3.erase(remove_if(poly3.begin(), poly3.end(), isspace), poly3.end());
+//Add '~' to beginning of poly string
+	string poly777 = poly3.insert(0, poly2);
+	string poly = poly777.insert(poly3.length(), "+");
+//Start of finding coe and exp
+	for (it; it < poly.length()-1; it++) {
+		int	find = poly.find_first_of('x', it + 2);
+		int find2 = poly.find_first_of('+', it + 2);
+		int find3 = poly.find_first_of('-', it + 2);
+		char a = poly[it+2];// after current place
+		char c = poly[it+1];// current place
+		char b = poly[it];// before current place
+//special case no coefficient = 1 or -1 :::::::::::::::::: perfect
+		if ((c == 'x' && b == '+') ||(c == 'x' && b == '~')) {
+			coe = '1';
+			coeint = atoi(coe.c_str());
+			//poly20.insert(coeint, expint);
+			cout << "coe = " << coe << endl;
+			cout << "exp = " << exp << endl;
+		}
+		if (c == 'x' && b == '-') {
+			coe = "-1";
+			coeint = atoi(coe.c_str());
+			//poly20.insert(coeint, expint);
+
+			cout << "coe = " << coe << endl;
+			cout << "exp = " << exp << endl;
+		}
+
+//Find coefficient with at the start of the string
+if (b == '~' && c != '-' && c != 'x') {
+	//	int	find = poly.find_first_of('x', it +2);
+		//int erichfind2 = poly.find_first_of('+', it + 2);
+		//int find3 = poly.find_first_of('-', it + 2);
+		//cout << "find = " << finerichd << endl;
+		//cout << "find2 = " << find2 << endl;
+		//cout << "fierichnd3 = " << find3 << endl;
+		//cout << "~" << endl;
+		// if place of x is less than the place of next + and next -
+			if ((find < find2 && find < find3 && find != -1) || (find2 == -1 && find3 == -1 && find != -1) || ((find < find2 && find3 == -1 || find < find3 && find2 == -1) && find != -1)) {
+				coe = poly.substr(it + 1, find - it - 1);
+				coeint = atoi(coe.c_str());
+				//poly20.insert(coeint, expint);
+				cout << "coe = " << coe << endl;
+				cout << "exp = " << exp << endl;
+			} // if place of + is less than the place of next x and next -
+			else if ((find2 < find && find2 < find3 && find2 != -1) || (find == -1 && find3 == -1 && find2 != -1) || ((find2 < find && find3 == -1 || find2 < find3 && find == -1) && find2 != -1)) {
+				coe = poly.substr(it + 1, find2 - it - 1);
+				exp = '0';
+				coeint = atoi(coe.c_str());
+				expint = atoi(exp.c_str());
+				poly20.insert(coeint, expint);
+				cout << "exp = " << exp << endl;
+				cout << "coe = " << coe << endl;
+			}// if place of - less than place of next x and next +
+			else if ((find3 < find2 && find3 < find && find3 != -1) || ((find2 == -1 && find == -1 && find3 != -1) || ((find3 < find && find2 == -1 || find3 < find2 && find == -1) && find3 != -1))) {
+				coe = poly.substr(it + 1, find3 - it - 1);
+				exp = '0';
+				coeint = atoi(coe.c_str());
+				expint = atoi(exp.c_str());
+				poly20.insert(coeint, expint);
+				cout << "exp = " << exp << endl;
+				cout << "coe = " << coe << endl;
+			}// if no place for x, +, or - are found::::::::::::one variable in string exception
+			else if (find == -1 && find2 == -1 && find3 == -1) {
+				coe = poly.substr(it + 1, find - it - 1);
+				exp = "0";
+				coeint = atoi(coe.c_str());
+				expint = atoi(exp.c_str());
+				poly20.insert(coeint, expint);
+				cout << "exp = " << exp << endl;
+				cout << "coe = " << coe << endl;
+			}
+		}
+		// find coefficients in the middle of string
+		if ( (c == '-' && b != '^' && a != 'x') || (c == '+' && a != 'x')) {
+		//int	finderich = poly.find_first_of('x', it+2);
+		//int finderich2 = poly.find_first_of('+', it+2);
+		//int find3 = poly.find_first_of('-', it+2);
+
+		//cout << "find = " << find << endl;
+		//cout << "find2 = " << find2 << endl;
+		//cout << "find3 = " << find3 << endl;
+		//cout << ":P" << endl;
+
+		if (c == '-') {//if current character is -
+		 // if place of x is less than the place of next + and next -
+			if ((find < find2 && find < find3 && find != -1) || (find2 == -1 && find3 == -1 && find != -1) || ((find < find2 && find3 == -1 || find < find3 && find2 == -1) && find != -1)) {
+				coe = poly.substr(it+1, find-it-1);
+				coeint = atoi(coe.c_str());
+				//poly20.insert(coeint, expint);
+				cout << "coe = " << coe << endl;
+				cout << "exp = " << exp << endl;
+			}// if place of + is less than the place of next x and next -
+			else if ((find2 < find && find2 < find3 && find2 != -1) || (find == -1 && find3 == -1 && find2 != -1) ||((find2 < find && find3 == -1 || find2 < find3 && find == -1) && find2 != -1)) {
+				coe = poly.substr(it+1, find2-it-1 );
+				exp = '0';
+				coeint = atoi(coe.c_str());
+				expint = atoi(exp.c_str());
+				poly20.insert(coeint, expint);
+				cout << "exp = " << exp << endl;
+				cout << "coe = " << coe << endl;
+			}
+			else if ((find3 < find2 && find3 < find && find3 != -1) || (find2 == -1 && find == -1 && find3 != -1) || ((find3 < find && find2 == -1 || find3 < find2 && find == -1) && find3 != -1)) {
+				coe = poly.substr(it+1, find3-it-1);
+				exp = '0';
+				coeint = atoi(coe.c_str());
+				expint = atoi(exp.c_str());
+				poly20.insert(coeint, expint);
+				cout << "exp = " << exp << endl;
+				cout << "coe = " << coe << endl;
+			}// if no place for x, +, or - are found::::::::::::end of string exception
+			else if (find == -1 && find2 == -1 && find3 == -1) {
+				coe = poly.substr(it + 1, find - it - 1);
+				exp = "0";
+				coeint = atoi(coe.c_str());
+				expint = atoi(exp.c_str());
+				poly20.insert(coeint, expint);
+				cout << "exp = " << exp << endl;
+				cout << "coe = " << coe << endl;
+			}
+		}
+		else if (c == '+') { // if current character is +
+			// if place of x is less than the place of next + and next -
+			if ((find < find2 && find < find3 && find != -1) || (find2 == -1 && find3 == -1 && find != -1) || ((find < find2 && find3 == -1 || find < find3 && find2 == -1) && find != -1)) {
+				coe = poly.substr(it+2, find -it -2);
+				coeint = atoi(coe.c_str());
+				//poly20.insert(coeint, expint);
+				cout << "coe = " << coe << endl;
+				cout << "exp = " << exp << endl;
+			}// if place of + is less than the place of next x and next -
+			else if ((find2 < find && find2 < find3 && find2 != -1) || (find == -1 && find3 == -1 && find2 != -1) || ((find2 < find && find3 == -1 || find2 < find3 && find == -1) && find2 != -1)) {
+				coe = poly.substr(it+2, find2 - it -2);
+				exp = '0';
+				coeint = atoi(coe.c_str());
+				expint = atoi(exp.c_str());
+				poly20.insert(coeint, expint);
+				cout << "exp = " << exp << endl;
+				cout << "coe = " << coe << endl;
+			}// if place of - less than place of next x and next +
+			else if ((find3 < find2 && find3 < find && find3 != -1) || (find2 == -1 && find == -1 && find3 != -1) || ((find3 < find && find2 == -1 || find3 < find2 && find == -1) && find3 != -1)) {
+				coe = poly.substr(it+2, find3-it-2);
+				exp = '0';
+				coeint = atoi(coe.c_str());
+				expint = atoi(exp.c_str());
+				poly20.insert(coeint, expint);
+				cout << "exp = " << exp << endl;
+				cout << "coe = " << coe << endl;
+			}// if no place for x, +, or - are found::::::::::::end of string exception
+			else if (find == -1 && find2 == -1 && find3 == -1 ) {
+				coe = poly.substr(it + 2, find - it - 2);
+				exp = "0";
+				coeint = atoi(coe.c_str());
+				expint = atoi(exp.c_str());
+				poly20.insert(coeint, expint);
+				cout << "exp = " << exp << endl;
+				cout << "coe = " << coe << endl;
+			}
+	
+			
+		}
+		}
+//Find exponent ::::::::::::::::::::::::::::: perfect
+		if (b == '^') {
+
+				//int find2 = poly.find_first_of('+', it+2);
+				//int find3 = poly.find_first_of('-', it+2);
+				if ((find3 < find2 && find3 != -1) || find2 == -1) { // find exp between ^ and -
+					expint = atoi(exp.c_str());
+					poly20.insert(coeint, expint);
+					cout << "exp = " << exp << endl;
+					cout << "coe = " << coe << endl;
+
+				}
+				else if (find3 == -1 || (find2 < find3 && find2 != -1)) {  // find exp between ^ and +
+					exp = poly.substr(it + 1, find2 - it - 1);
+					expint = atoi(exp.c_str());
+					poly20.insert(coeint, expint);
+					cout << "exp = " << exp << endl;
+					cout << "coe = " << coe << endl;
+
+				}
+
+			}
+			if (c == 'x' && a != '^') { //special case no ^
+				exp = '1';
+				expint = atoi(exp.c_str());
+				poly20.insert(coeint, expint);
+				cout << "exp = " << exp << endl;
+				cout << "coe = " << coe << endl;
+
+			}
+		/*coeint = atoi(coe.c_str());
+		expint = atoi(exp.c_str());
+		cout << "coeint = " << coeint << endl;
+		cout << "expint = " << expint << endl;*/
+
+
+		
+
+	}
+
+
+	printOrderedPoly(poly20);
+
+	OrderedPoly<int> o;
+	o.insert(5,6);
+	o.insert(1,1 );
+	o.insert(22, 0);
+	o.insert(1,7 );
+	o.insert(20,20 );
+	printOrderedPoly(o);
+	system("PAUSE");
+	cin.get();
+	return 0;
+}//erich
